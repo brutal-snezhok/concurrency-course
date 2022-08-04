@@ -1,9 +1,13 @@
 package course.concurrency.exams.auction;
 
-public class Notifier {
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+public class Notifier {
+    private ExecutorService executor =
+            Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     public void sendOutdatedMessage(Bid bid) {
-        imitateSending();
+        executor.submit(this::imitateSending);
     }
 
     private void imitateSending() {
@@ -12,5 +16,7 @@ public class Notifier {
         } catch (InterruptedException e) {}
     }
 
-    public void shutdown() {}
+    public void shutdown() {
+        executor.shutdownNow();
+    }
 }
